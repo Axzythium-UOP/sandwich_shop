@@ -21,3 +21,15 @@ class App extends StatelessWidget {
     );
   }
 }
+
+class OrderItemDisplay extends StatelessWidget {
+  final String itemName;
+  final int quantity;
+
+  const OrderItemDisplay(this.quantity, this.itemName, {super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Text('This is a placehold for OrderItemDisplay');
+  }
+}
