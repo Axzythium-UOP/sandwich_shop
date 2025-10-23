@@ -23,13 +23,13 @@ class App extends StatelessWidget {
 }
 
 class OrderItemDisplay extends StatelessWidget {
-  final String itemName;
+  final String itemType;
   final int quantity;
 
-  const OrderItemDisplay(this.quantity, this.itemName, {super.key});
+  const OrderItemDisplay(this.quantity, this.itemType, {super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Text('This is a placehold for OrderItemDisplay');
+    return Text('$quantity $itemType sandwich(es): ${'🥪' * quantity}');
   }
 }
