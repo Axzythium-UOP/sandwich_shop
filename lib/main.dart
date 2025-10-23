@@ -59,7 +59,7 @@ class OrderItemDisplay extends StatelessWidget {
     final sandwiches = List.filled(quantity, '🥪').join();
     return Text(
       '$quantity $itemType sandwich(es): $sandwiches',
-      style: const TextStyle(color: Colors.white, fontSize: 16),
+      style: const TextStyle(color: Colors.white, fontSize: 18),
       textAlign: TextAlign.center,
     );
   }
