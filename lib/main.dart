@@ -35,10 +35,10 @@ class OrderItemDisplayRow extends StatelessWidget {
     return Container(
       width: double.infinity,
       color: Colors.blue,
-      child: Row(
+      child: const Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         crossAxisAlignment: CrossAxisAlignment.center,
-        children: const [
+        children: [
           OrderItemDisplay(3, 'BLT'),
           OrderItemDisplay(5, 'Club'),
           OrderItemDisplay(2, 'Veggie'),
