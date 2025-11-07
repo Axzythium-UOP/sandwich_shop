@@ -40,7 +40,7 @@ class OrderItemDisplayRow extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           OrderItemDisplay(3, 'BLT'),
-          OrderItemDisplay(5, 'Club'),
+          OrderItemDisplay(5, 'Clb'),
           OrderItemDisplay(2, 'Veggie'),
         ],
       ),
