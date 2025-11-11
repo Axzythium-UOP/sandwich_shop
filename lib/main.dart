@@ -13,36 +13,28 @@ class App extends StatelessWidget {
       title: 'Sandwich Shop App',
       home: Scaffold(
         appBar: AppBar(title: const Text('Sandwich Counter')),
-        body: const SafeArea(
-          child: Align(
-            alignment: Alignment.topCenter,
-            child: SizedBox(
-              height: 150,
-              child: OrderItemDisplayRow(),
-            ),
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const OrderItemDisplay(5, 'Footlong'),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ElevatedButton(
+                    onPressed: () => print('Add button pressed!'),
+                    child: const Text('Add'),
+                  ),
+                  const SizedBox(width: 8),
+                  ElevatedButton(
+                    onPressed: () => print('Remove button pressed!'),
+                    child: const Text('Remove'),
+                  ),
+                ],
+              ),
+            ],
           ),
         ),
-      ),
-    );
-  }
-}
-
-class OrderItemDisplayRow extends StatelessWidget {
-  const OrderItemDisplayRow({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      color: Colors.blue,
-      child: const Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          OrderItemDisplay(3, 'BLT'),
-          OrderItemDisplay(5, 'Clb'),
-          OrderItemDisplay(2, 'Veggie'),
-        ],
       ),
     );
   }
@@ -59,7 +51,7 @@ class OrderItemDisplay extends StatelessWidget {
     final sandwiches = List.filled(quantity, '🥪').join();
     return Text(
       '$quantity $itemType sandwich(es): $sandwiches',
-      style: const TextStyle(color: Colors.white, fontSize: 18),
+      style: const TextStyle(color: Colors.black, fontSize: 18),
       textAlign: TextAlign.center,
     );
   }
