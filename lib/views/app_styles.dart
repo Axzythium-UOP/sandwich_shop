@@ -5,6 +5,10 @@ const TextStyle normalText = TextStyle(
 );
 
 const heading1 = TextStyle(
-  fontSize: 24,
+  fontSize: 20,
+  fontWeight: FontWeight.bold,
+);
+const heading2 = TextStyle(
+  fontSize: 18,
   fontWeight: FontWeight.bold,
 );
