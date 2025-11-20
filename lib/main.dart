@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'views/app_styles.dart';
-
-enum BreadType { white, wheat, wholemeal }
+import 'package:sandwich_shop/views/app_styles.dart';
+import 'package:sandwich_shop/repositories/order_repository.dart';
 
 void main() {
   runApp(const App());
@@ -19,10 +18,14 @@ class App extends StatelessWidget {
   }
 }
 
+enum SandwichSize { footlong, sixInch }
+
+enum BreadType { white, wheat, wholemeal }
+
 class OrderScreen extends StatefulWidget {
   final int maxQuantity;
 
-  const OrderScreen({super.key, this.maxQuantity = 10});
+  const OrderScreen({super.key, this.maxQuantity = 20});
 
   @override
   State<OrderScreen> createState() {
@@ -31,14 +34,16 @@ class OrderScreen extends StatefulWidget {
 }
 
 class _OrderScreenState extends State<OrderScreen> {
-  int _quantity = 0;
+  late final OrderRepository _orderRepository;
   final TextEditingController _notesController = TextEditingController();
   bool _isFootlong = true;
   BreadType _selectedBreadType = BreadType.white;
+  bool _isToasted = false;
 
   @override
   void initState() {
     super.initState();
+    _orderRepository = OrderRepository(maxQuantity: widget.maxQuantity);
     _notesController.addListener(() {
       setState(() {});
     });
@@ -51,19 +56,15 @@ class _OrderScreenState extends State<OrderScreen> {
   }
 
   VoidCallback? _getIncreaseCallback() {
-    if (_quantity < widget.maxQuantity) {
-      return () {
-        setState(() => _quantity++);
-      };
+    if (_orderRepository.canIncrement) {
+      return () => setState(_orderRepository.increment);
     }
     return null;
   }
 
   VoidCallback? _getDecreaseCallback() {
-    if (_quantity > 0) {
-      return () {
-        setState(() => _quantity--);
-      };
+    if (_orderRepository.canDecrement) {
+      return () => setState(_orderRepository.decrement);
     }
     return null;
   }
@@ -105,21 +106,19 @@ class _OrderScreenState extends State<OrderScreen> {
     }
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'Sandwich Counter',
-          style: heading1,
-        ),
-      ),
+      appBar: AppBar(title: const Text('Sandwich Counter', style: heading1)),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             OrderItemDisplay(
-              quantity: _quantity,
+              quantity: _orderRepository.quantity,
               itemType: sandwichType,
               breadType: _selectedBreadType,
               orderNote: noteForDisplay,
+              isToasted: _isToasted,
+              price: PricingRepository()
+                  .calculatePrice(_orderRepository.quantity, _isFootlong),
             ),
             const SizedBox(height: 20),
             Row(
@@ -127,14 +126,29 @@ class _OrderScreenState extends State<OrderScreen> {
               children: [
                 const Text('six-inch', style: normalText),
                 Switch(
-                  value: _isFootlong,
-                  onChanged: _onSandwichTypeChanged,
-                ),
+                    value: _isFootlong,
+                    onChanged: _onSandwichTypeChanged,
+                    key: const Key('SandwichTypeChanged')),
                 const Text('footlong', style: normalText),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text('Untoasted', style: normalText),
+                Switch(
+                  value: _isToasted,
+                  onChanged: (value) {
+                    setState(() => _isToasted = value);
+                  },
+                  key: const Key('ToastedSwitch'),
+                ),
+                const Text('Toasted', style: normalText),
               ],
             ),
             const SizedBox(height: 10),
             DropdownMenu<BreadType>(
+              key: const Key('bread_type_dropdown'),
               textStyle: normalText,
               initialSelection: _selectedBreadType,
               onSelected: _onBreadTypeSelected,
@@ -190,7 +204,6 @@ class StyledButton extends StatelessWidget {
     required this.label,
     required this.backgroundColor,
   });
-
   @override
   Widget build(BuildContext context) {
     ButtonStyle myButtonStyle = ElevatedButton.styleFrom(
@@ -202,13 +215,7 @@ class StyledButton extends StatelessWidget {
     return ElevatedButton(
       onPressed: onPressed,
       style: myButtonStyle,
-      child: Row(
-        children: [
-          Icon(icon),
-          const SizedBox(width: 8),
-          Text(label),
-        ],
-      ),
+      child: Row(children: [Icon(icon), const SizedBox(width: 8), Text(label)]),
     );
   }
 }
@@ -218,6 +225,8 @@ class OrderItemDisplay extends StatelessWidget {
   final String itemType;
   final BreadType breadType;
   final String orderNote;
+  final bool isToasted;
+  final double price;
 
   const OrderItemDisplay({
     super.key,
@@ -225,23 +234,31 @@ class OrderItemDisplay extends StatelessWidget {
     required this.itemType,
     required this.breadType,
     required this.orderNote,
+    required this.isToasted,
+    required this.price,
   });
 
   @override
   Widget build(BuildContext context) {
-    String displayText =
-        '$quantity ${breadType.name} $itemType sandwich(es): ${'🥪' * quantity}';
-
+    final safeQuantity = quantity.clamp(0, 100);
+    final emoji = List.filled(safeQuantity, '🥪').join();
+    final String toastStatus = isToasted ? 'toasted' : 'untoasted';
     return Column(
+      mainAxisSize: MainAxisSize.min,
       children: [
         Text(
-          displayText,
-          style: normalText,
+          '$quantity ${breadType.name} $itemType sandwich(es): $emoji',
+          style: const TextStyle(fontSize: 20),
         ),
-        const SizedBox(height: 8),
+        const SizedBox(height: 10),
+        Text('Price: \$${price.toStringAsFixed(2)}'),
+        const SizedBox(height: 6),
+        Text('Bread: ${breadType.name}'),
+        Text('Type: $toastStatus'),
+        const SizedBox(height: 4),
         Text(
-          'Note: $orderNote',
-          style: normalText,
+          orderNote.isEmpty ? 'No notes added.' : 'Note: $orderNote',
+          style: const TextStyle(fontStyle: FontStyle.italic),
         ),
       ],
     );
