@@ -4,6 +4,8 @@ void main() {
   runApp(const App());
 }
 
+enum SandwichSize { footlong, sixInch }
+
 class App extends StatelessWidget {
   const App({super.key});
 
@@ -30,6 +32,10 @@ class OrderScreen extends StatefulWidget {
 class _OrderScreenState extends State<OrderScreen> {
   int _quantity = 0;
   final TextEditingController _noteController = TextEditingController();
+  SandwichSize _selectedSize = SandwichSize.footlong;
+
+  String get _selectedSizeLabel =>
+      _selectedSize == SandwichSize.footlong ? 'Footlong' : 'Six-inch';
 
   @override
   void dispose() {
@@ -44,7 +50,7 @@ class _OrderScreenState extends State<OrderScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
-              'Added 1 Footlong${note.isNotEmpty ? ' — Note: $note' : ''}'),
+              'Added 1 ${_selectedSizeLabel}${note.isNotEmpty ? ' — Note: $note' : ''}'),
         ),
       );
     } else {
@@ -61,7 +67,7 @@ class _OrderScreenState extends State<OrderScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
-              'Removed 1 Footlong${note.isNotEmpty ? ' — Note: $note' : ''}'),
+              'Removed 1 ${_selectedSizeLabel}${note.isNotEmpty ? ' — Note: $note' : ''}'),
         ),
       );
     } else {
@@ -83,7 +89,25 @@ class _OrderScreenState extends State<OrderScreen> {
           children: <Widget>[
             OrderItemDisplay(
               _quantity,
-              'Footlong',
+              _selectedSizeLabel,
+            ),
+            const SizedBox(height: 8),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24.0),
+              child: SegmentedButton<SandwichSize>(
+                segments: const <ButtonSegment<SandwichSize>>[
+                  ButtonSegment(
+                      value: SandwichSize.footlong, label: Text('Footlong')),
+                  ButtonSegment(
+                      value: SandwichSize.sixInch, label: Text('Six-inch')),
+                ],
+                selected: <SandwichSize>{_selectedSize},
+                onSelectionChanged: (Set<SandwichSize> newSelection) {
+                  setState(() {
+                    _selectedSize = newSelection.first;
+                  });
+                },
+              ),
             ),
             const SizedBox(height: 12),
             Padding(
