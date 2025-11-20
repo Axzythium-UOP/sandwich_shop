@@ -104,13 +104,15 @@ class _OrderScreenState extends State<OrderScreen> {
                 StyledButton(
                   label: 'Add',
                   icon: Icons.add,
-                  onPressed: _increaseQuantity,
+                  onPressed: (_quantity < widget.maxQuantity)
+                      ? _increaseQuantity
+                      : null,
                 ),
                 const SizedBox(width: 12),
                 StyledButton(
                   label: 'Remove',
                   icon: Icons.remove,
-                  onPressed: _decreaseQuantity,
+                  onPressed: (_quantity > 0) ? _decreaseQuantity : null,
                 ),
               ],
             ),
@@ -153,22 +155,37 @@ class StyledButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Resolve colors depending on enabled/disabled states for clearer feedback.
+    final ButtonStyle style = ElevatedButton.styleFrom(
+      backgroundColor: Colors.blue,
+      foregroundColor: Colors.black,
+      textStyle: const TextStyle(
+        fontFamily: 'Roboto',
+        fontSize: 16,
+        fontWeight: FontWeight.w600,
+      ),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+    ).copyWith(
+      backgroundColor: MaterialStateProperty.resolveWith<Color?>((states) {
+        if (states.contains(MaterialState.disabled))
+          return Colors.blue.shade200;
+        return Colors.blue;
+      }),
+      foregroundColor: MaterialStateProperty.resolveWith<Color?>((states) {
+        if (states.contains(MaterialState.disabled)) return Colors.black45;
+        return Colors.black;
+      }),
+    );
+
+    final iconColor = onPressed != null ? Colors.black : Colors.black45;
+
     return ElevatedButton(
       onPressed: onPressed,
-      style: ElevatedButton.styleFrom(
-        backgroundColor: Colors.blue,
-        foregroundColor: Colors.black,
-        textStyle: const TextStyle(
-          fontFamily: 'Roboto',
-          fontSize: 16,
-          fontWeight: FontWeight.w600,
-        ),
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-      ),
+      style: style,
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(icon, color: Colors.black),
+          Icon(icon, color: iconColor),
           const SizedBox(width: 8),
           Text(label),
         ],
