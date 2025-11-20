@@ -18,7 +18,7 @@ class App extends StatelessWidget {
   }
 }
 
-enum SandwichSize { footlong, sixInch }
+enum SandwichSize { footLong, sixInch }
 
 enum BreadType { white, wheat, wholemeal }
 
