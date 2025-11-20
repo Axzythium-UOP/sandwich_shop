@@ -101,13 +101,16 @@ class _OrderScreenState extends State<OrderScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                ElevatedButton(
+                StyledButton(
+                  label: 'Add',
+                  icon: Icons.add,
                   onPressed: _increaseQuantity,
-                  child: const Text('Add'),
                 ),
-                ElevatedButton(
+                const SizedBox(width: 12),
+                StyledButton(
+                  label: 'Remove',
+                  icon: Icons.remove,
                   onPressed: _decreaseQuantity,
-                  child: const Text('Remove'),
                 ),
               ],
             ),
@@ -131,6 +134,45 @@ class OrderItemDisplay extends StatelessWidget {
       '$quantity $itemType sandwich(es): $sandwiches',
       style: const TextStyle(color: Colors.black, fontSize: 18),
       textAlign: TextAlign.center,
+    );
+  }
+}
+
+/// A reusable styled ElevatedButton with icon and label to avoid repetition.
+class StyledButton extends StatelessWidget {
+  final String label;
+  final IconData icon;
+  final VoidCallback? onPressed;
+
+  const StyledButton({
+    super.key,
+    required this.label,
+    required this.icon,
+    required this.onPressed,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+      onPressed: onPressed,
+      style: ElevatedButton.styleFrom(
+        backgroundColor: Colors.blue,
+        foregroundColor: Colors.black,
+        textStyle: const TextStyle(
+          fontFamily: 'Roboto',
+          fontSize: 16,
+          fontWeight: FontWeight.w600,
+        ),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon, color: Colors.black),
+          const SizedBox(width: 8),
+          Text(label),
+        ],
+      ),
     );
   }
 }
