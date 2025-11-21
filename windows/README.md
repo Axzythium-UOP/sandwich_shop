@@ -139,5 +139,5 @@ If you want, I can also:
 - Add a short section describing how the SegmentedButton and StyledButton are implemented in `lib/main.dart`.
 - Add developer setup tips specific to macOS or Windows CI.
 
-Contact: Daniel Gardner
-Email: Daniel.t.gardner@hotmail.coms
+Contact: Dan Gardner
+Email: Daniel.t.gardner@hotmail.com
