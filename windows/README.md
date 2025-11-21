@@ -140,4 +140,4 @@ If you want, I can also:
 - Add developer setup tips specific to macOS or Windows CI.
 
 Contact: Daniel Gardner
-Email: daniel.t.gardner@hotmail.com
+Email: Daniel.t.gardner@hotmail.coms
