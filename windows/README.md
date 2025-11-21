@@ -26,7 +26,7 @@ Any recent version of Windows (detailed steps below), macOS, or Linux.
 
 Flutter SDK (ensure the flutter command is recognized in your terminal). Installation help: flutter.dev.
 
-Git installed.
+Git installed
 
 A device/emulator/desktop ready to run Flutter apps.
 
