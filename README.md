@@ -14,18 +14,23 @@ Steps
 
 Install dependencies:
 
-bash
+```bash
 flutter pub get
+```
+
 Run the app:
 
 Generic:
 
-bash
+```bash
 flutter run
+```
+
 Windows:
 
-bash
+```bash
 flutter run -d windows
+```
 Or open the folder in VS Code / Android Studio, select a device, and run or debug.
 
 Note: After changing widget constructors or state initialization, perform a full restart rather than only hot reload to avoid issues with SegmentedButton selection and controllers.
@@ -59,9 +64,11 @@ OrderRepository (lib/repositories/order_repository.dart) is a stub for persisten
 
 Run tests with:
 
-bash
+```bash
 flutter test
-test/widget_test.dart demonstrates widget tests that validate Add/Remove behavior and maxQuantity constraints.​
+test/widget_test.dart 
+```
+demonstrates widget tests that validate Add/Remove behavior and maxQuantity constraints.​
 
 Structure and technologies
 lib/
