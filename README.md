@@ -12,11 +12,6 @@ Git installed, plus a connected device/emulator or enabled desktop support.
 
 Steps
 
-Clone the repo:
-
-bash
-git clone <your-repo-url>
-cd "c:\Users\thayw\OneDrive\Desktop\University\lv5\programming application and programming languages\sandwich_shop"
 Install dependencies:
 
 bash
